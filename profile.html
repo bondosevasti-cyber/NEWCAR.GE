@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="ka">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - NEWCARGE 360°</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CORE SETUP & ANIMATIONS --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: floatBlob 10s infinite alternate;
+        }
+
+        .blob-1 {
+            top: 10%;
+            left: 10%;
+            width: 300px;
+            height: 300px;
+            background: #4338ca;
+            animation-duration: 20s;
+        }
+
+        .blob-2 {
+            bottom: 20%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            background: #0ea5e9;
+            animation-duration: 25s;
+        }
+
+        .blob-3 {
+            top: 40%;
+            left: 40%;
+            width: 350px;
+            height: 350px;
+            background: #ec4899;
+            animation-duration: 22s;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes floatBlob {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(50px, 50px) scale(1.1);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* --- GLASSMORPHISM UTILITIES --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-heavy {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- TYPOGRAPHY & ELEMENTS --- */
+        .neon-text {
+            background: linear-gradient(to right, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.4));
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 25px rgba(37, 99, 235, 0.6);
+            transform: scale(1.02);
+        }
+
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Form Elements in Glass */
+        input,
+        select,
+        textarea {
+            background: rgba(0, 0, 0, 0.3) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            backdrop-filter: blur(4px);
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #3b82f6 !important;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Placeholder color */
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            min-width: 220px;
+            animation: slideDown 0.2s ease-out;
+            z-index: 50;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        /* Live Indicator */
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #10B981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10B981;
+            animation: pulse 2s infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 16px;
+            height: 16px;
+            background: #EF4444;
+            color: white;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 0 5px #EF4444;
+        }
+
+        /* --- NEW STYLES FOR ADD VEHICLE MODAL (Based on your image) --- */
+        .search-input-group {
+            background: rgba(255, 255, 255, 0.1);
+            /* Transparent/Grey Pill */
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+            /* Spacing between inputs */
+        }
+
+        .search-input-group:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .search-input-group label {
+            color: #9ca3af;
+            /* Text-gray-400 */
+            font-size: 0.875rem;
+            /* text-sm */
+            width: 40%;
+            pointer-events: none;
+        }
+
+        .search-input-group select,
+        .search-input-group input {
+            background: transparent !important;
+            border: none !important;
+            width: 60%;
+            color: white !important;
+            font-size: 1rem;
+            padding: 0;
+            cursor: pointer;
+            appearance: none;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .search-input-group select:focus,
+        .search-input-group input:focus {
+            box-shadow: none !important;
+            outline: none;
+        }
+
+        /* Search Button Circle */
+        .search-btn-circle {
+            width: 60px;
+            height: 60px;
+            background: #9ca3af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, background 0.2s;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .search-btn-circle:hover {
+            transform: scale(1.1);
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        /* Layout for Search Section */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            /* Center vertically */
+            gap: 15px;
+        }
+
+        .inputs-stack {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Grid-based form layout for consistent field sizes */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            align-items: start;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Make inputs consistently sized */
+        .form-input {
+            height: 48px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+            outline: none;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        /* search button same visual height as inputs */
+        .search-button {
+            height: 48px;
+            min-width: 120px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        /* --- LIGHT MODE STYLES --- */
+        html.light body {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        html.light .bg-animation {
+            display: none;
+        }
+
+        html.light header {
+            background-color: rgba(241, 245, 249, 0.7);
+            border-bottom-color: rgba(0, 0, 0, 0.1);
+        }
+
+        html.light .glass,
+        html.light .btn-glass {
+            background: rgba(255, 255, 255, 0.6);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #334155;
+        }
+
+        html.light .glass-heavy {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        html.light .glass-card {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        html.light .text-white,
+        html.light .text-gray-200,
+        html.light .text-gray-300 {
+            color: #1e293b;
+        }
+
+        html.light .text-gray-400 {
+            color: #64748b;
+        }
+
+        html.light .text-gray-500 {
+            color: #475569;
+        }
+
+        html.light .neon-text {
+            background: linear-gradient(to right, #3b82f6, #1d4ed8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: none;
+        }
+
+        html.light input,
+        html.light select,
+        html.light textarea {
+            background: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        html.light ::placeholder {
+            color: #94a3b8;
+        }
+
+        html.light .dropdown-menu {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Light mode for new search inputs */
+        html.light .search-input-group {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        html.light .search-input-group label {
+            color: #64748b;
+        }
+
+        html.light .search-input-group select,
+        html.light .search-input-group input {
+            color: #0f172a !important;
+        }
+
+        /* MOBILE MENU */
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        #mobile-menu.open {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 p-4">
+        <div class="glass rounded-2xl max-w-7xl mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition">
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-blue-500 blur-md opacity-50 rounded-full"></div>
+                            <svg class="w-8 h-8 relative z-10 text-white" viewBox="0 0 40 40" fill="none">
+                                <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2" />
+                                <path d="M15 20L18 23L25 16" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <span id="logo-text" class="text-xl font-bold tracking-wider">NEWCARGE 360°</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="glass p-2 rounded-xl hover:bg-white/20 transition">
+                        <svg class="theme-icon-sun w-5 h-5 text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                            </path>
+                        </svg>
+                        <svg class="theme-icon-moon w-5 h-5 text-white hidden" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <!-- Language Dropdown -->
+                    <div class="relative">
+                        <button onclick="toggleDropdown('lang-dropdown-desktop')"
+                            class="glass flex items-center space-x-2 px-3 py-2 rounded-xl text-sm hover:bg-white/20 transition text-white">
+                            <span class="current-lang-text">GE</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="lang-dropdown-desktop"
+                            class="hidden absolute top-full right-0 mt-3 w-40 glass rounded-xl shadow-2xl py-2 z-50 border border-white/10">
+                            <button onclick="changeLanguage('GE', 'GE')"
+                                class="w-full text-left px-4 py-2 hover:bg-white/10 transition text-white text-sm">ქართული</button>
+                            <button onclick="changeLanguage('EN', 'EN')"
+                                class="w-full text-left px-4 py-2 hover:bg-white/10 transition text-white text-sm">English</button>
+                            <button onclick="changeLanguage('RU', 'RU')"
+                                class="w-full text-left px-4 py-2 hover:bg-white/10 transition text-white text-sm">Русский</button>
+                        </div>
+                    </div>
+
+                    <!-- Notifications (Profile Specific) -->
+                    <button onclick="toggleNotifications()"
+                        class="glass relative p-2 rounded-xl hover:bg-white/20 transition">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span class="notification-dot">3</span>
+                    </button>
+
+                    <!-- User Profile: Visible when logged in -->
+                    <div id="user-profile" class="user-profile-container hidden items-center space-x-4 relative">
+                        <button onclick="toggleProfileDropdown(event)" id="user-name-button"
+                            class="font-semibold text-white cursor-pointer flex items-center gap-2 hover:opacity-80 transition">
+                            <span class="user-name-text"></span>
+                            <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7">
+                                </path>
+                            </svg>
+                        </button>
+                        <div id="profile-dropdown"
+                            class="hidden absolute top-full right-0 mt-3 w-56 glass rounded-xl shadow-2xl py-2 z-50 border border-white/10">
+                            <div class="px-4 py-3 border-b border-white/10">
+                                <p class="text-xs text-gray-400" data-key="nav_auth_as">ავტორიზებული როგორც</p>
+                                <p id="dropdown-user-name"
+                                    class="dropdown-user-name text-sm font-bold text-white truncate">მომხმარებელი</p>
+                            </div>
+                            <a href="profile.html"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-white/10 transition"
+                                data-key="nav_profile">პროფილზე გადასვლა</a>
+                            <button onclick="handleLogout()"
+                                class="w-full text-left block px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 transition"
+                                data-key="nav_logout">გასვლა</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HAMBURGER BUTTON (Mobile Only) -->
+                <button onclick="toggleMobileMenu()"
+                    class="md:hidden glass p-2 rounded-xl hover:bg-white/20 transition">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- MOBILE MENU DROPDOWN -->
+            <div id="mobile-menu" class="md:hidden border-t border-white/10 pt-2 space-y-4">
+                <!-- Theme Toggle (Mobile) -->
+                <div class="flex justify-between items-center px-2">
+                    <span class="text-sm text-gray-300">Theme</span>
+                    <button onclick="toggleTheme()" class="glass p-2 rounded-xl hover:bg-white/20 transition">
+                        <svg class="theme-icon-sun w-5 h-5 text-white" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                            </path>
+                        </svg>
+                        <svg class="theme-icon-moon w-5 h-5 text-white hidden" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Language Toggle (Mobile) -->
+                <div class="flex justify-between items-center px-2">
+                    <span class="text-sm text-gray-300">Language</span>
+                    <div class="relative">
+                        <button onclick="toggleDropdown('lang-dropdown-mobile')"
+                            class="glass flex items-center space-x-2 px-3 py-2 rounded-xl text-sm hover:bg-white/20 transition text-white">
+                            <span class="current-lang-text">GE</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div id="lang-dropdown-mobile"
+                            class="hidden absolute top-full right-0 mt-3 w-40 glass rounded-xl shadow-2xl py-2 z-50 border border-white/10">
+                            <button onclick="changeLanguage('GE', 'GE')"
+                                class="w-full text-left px-4 py-2 hover:bg-white/10 transition text-white text-sm">ქართული</button>
+                            <button onclick="changeLanguage('EN', 'EN')"
+                                class="w-full text-left px-4 py-2 hover:bg-white/10 transition text-white text-sm">English</button>
+                            <button onclick="changeLanguage('RU', 'RU')"
+                                class="w-full text-left px-4 py-2 hover:bg-white/10 transition text-white text-sm">Русский</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile (Mobile) -->
+                <div class="user-profile-container hidden flex-col gap-2 px-2">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-500/30 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="user-name-text font-bold text-white"></span>
+                    </div>
+                    <div class="px-2 py-1 border-b border-white/5 mb-2">
+                        <p class="text-[10px] text-gray-400" data-key="nav_auth_as">ავტორიზებული როგორც</p>
+                        <p class="dropdown-user-name text-xs font-bold text-white truncate">User</p>
+                    </div>
+                    <a href="profile.html"
+                        class="w-full text-center glass px-4 py-2 rounded-xl text-sm text-gray-200 hover:bg-white/10 transition block"
+                        data-key="nav_profile">პროფილზე გადასვლა</a>
+                    <button onclick="handleLogout()"
+                        class="w-full glass px-4 py-2 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition"
+                        data-key="nav_logout">გასვლა</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8 space-y-10">
+
+        <section class="glass-card p-8 relative overflow-hidden">
+            <div
+                class="absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/3">
+            </div>
+            <div class="relative z-10">
+                <h1 class="text-3xl sm:text-5xl font-bold mb-4 neon-text" id="welcome-title" data-key="dash_hello">
+                    გამარჯობა!</h1>
+                <p class="text-lg text-gray-300 mb-8 max-w-2xl font-light" id="welcome-subtitle"
+                    data-key="dash_welcome">თქვენი ავტომობილის ყველა მომსახურება — ერთ სივრცეში. მართეთ სერვისები
+                    დისტანციურად.</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button onclick="showOrderModal()"
+                        class="btn-primary px-6 py-3 sm:px-8 sm:py-4 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center gap-2 w-full sm:w-auto">
+                        <span>⚡</span> <span data-key="btn_new_order">ახალი შეკვეთა</span>
+                    </button>
+                    <button onclick="showAddVehicleModal()"
+                        class="glass bg-white/5 hover:bg-white/10 px-6 py-3 sm:px-8 sm:py-4 text-white rounded-xl font-semibold transition border border-white/20 flex items-center justify-center gap-2 w-full sm:w-auto">
+                        <span>🚘</span> <span data-key="btn_add_car">ავტომობილის დამატება</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                <span class="w-1 h-6 bg-blue-500 rounded-full"></span> <span data-key="title_garage">ჩემი გარაჟი</span>
+            </h2>
+            <div id="garage-grid" class="grid gap-6 md:grid-cols-2">
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                <span class="w-1 h-6 bg-purple-500 rounded-full"></span> <span
+                    data-key="title_services">სერვისები</span>
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="glass-card p-6 text-center cursor-pointer group hover:bg-white/10"
+                    onclick="window.location.href='evacuator_service.html'">
+                    <div
+                        class="w-14 h-14 mx-auto mb-4 bg-blue-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
+                        <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-white" data-key="srv_evac">ევაკუატორი</h3>
+                    <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider" data-key="srv_evac_sub">24/7
+                        მომსახურება</p>
+                </div>
+
+                <div class="glass-card p-6 text-center cursor-pointer group hover:bg-white/10"
+                    onclick="selectService('detailing')">
+                    <div
+                        class="w-14 h-14 mx-auto mb-4 bg-pink-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
+                        <svg class="w-7 h-7 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-white" data-key="srv_detail">დითეილინგი</h3>
+                    <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider" data-key="srv_detail_sub">პრემიუმ
+                        ხარისხი</p>
+                </div>
+
+                <div class="glass-card p-6 text-center cursor-pointer group hover:bg-white/10"
+                    onclick="selectService('diagnostics')">
+                    <div
+                        class="w-14 h-14 mx-auto mb-4 bg-yellow-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
+                        <svg class="w-7 h-7 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-white" data-key="srv_diag">დიაგნოსტიკა</h3>
+                    <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-wider" data-key="srv_diag_sub">სრული
+                        შემოწმება</p>
+                </div>
+
+                <div class="glass-card p-6 text-center cursor-pointer group hover:bg-white/10 relative border-green-500/30"
+                    onclick="selectService('import')">
+                    <span
+                        class="absolute top-3 right-3 bg-green-500 text-black text-[9px] font-bold px-2 py-0.5 rounded-full">NEW</span>
+                    <div
+                        class="w-14 h-14 mx-auto mb-4 bg-green-500/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition">
+                        <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-white" data-key="srv_import">იმპორტის პაკეტი</h3>
+                    <p class="text-[10px] text-green-400 mt-1 uppercase tracking-wider" data-key="srv_import_sub">სრული
+                        სერვისი</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <span class="w-1 h-6 bg-orange-500 rounded-full"></span> <span data-key="title_orders">მიმდინარე
+                        შეკვეთები</span>
+                </h2>
+                <button onclick="showOrderHistory()"
+                    class="text-sm text-blue-400 hover:text-white transition font-medium">ისტორია &rarr;</button>
+            </div>
+
+            <div class="glass-card p-8 text-center border-2 border-dashed border-white/10">
+                <div class="text-2xl mb-3">📭</div>
+                <h3 class="text-lg font-semibold text-white mb-1" data-key="empty_title">შეკვეთები არ მოიძებნა</h3>
+                <p class="text-sm text-gray-500" data-key="empty_desc">ჯერჯერობით არანაირი შეკვეთა არ არის გაფორმებული.
+                </p>
+                <button onclick="showOrderModal()" class="mt-4 btn-primary px-6 py-2 rounded-xl font-bold text-sm">
+                    <span data-key="btn_new_order">ახალი შეკვეთა</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="notifications-panel"
+        class="hidden fixed top-20 right-4 w-96 max-w-[90vw] glass-heavy rounded-2xl shadow-2xl z-50 border border-white/10 animate-fade-in-up">
+        <div class="p-4 border-b border-white/10 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-white" data-key="notif_title">შეტყობინებები</h3>
+            <button onclick="toggleNotifications()" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+        <div class="max-h-80 overflow-y-auto p-2">
+            <div class="p-3 hover:bg-white/5 rounded-xl transition cursor-pointer border-b border-white/5">
+                <div class="flex items-start gap-3">
+                    <div
+                        class="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                        ℹ️</div>
+                    <div>
+                        <p class="text-sm font-semibold text-white" data-key="notif_demo_title">ევაკუატორი გზაშია</p>
+                        <p class="text-xs text-gray-400 mt-1" data-key="notif_demo_desc">მისვლის დრო: ~12 წუთი</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-widget fixed bottom-6 right-6 z-50">
+        <button onclick="toggleChat()"
+            class="bg-gradient-to-r from-blue-600 to-indigo-600 w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg shadow-blue-600/40 hover:scale-110 transition relative border border-white/20">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+            <span class="live-indicator absolute top-3 right-3 border-2 border-slate-900"></span>
+        </button>
+
+        <div id="chat-window"
+            class="hidden absolute bottom-16 right-0 glass-heavy rounded-2xl shadow-2xl w-80 overflow-hidden mb-4 animate-slide-in-up border border-white/10">
+            <div class="bg-blue-600/90 p-4 text-white flex justify-between items-center backdrop-blur-md">
+                <div class="flex items-center gap-2 font-bold">
+                    <span>🤖</span> <span data-key="chat_assistant">Assistant</span>
+                </div>
+                <button onclick="toggleChat()" class="hover:text-gray-200">&times;</button>
+            </div>
+            <div class="h-64 p-4 overflow-y-auto bg-black/20 space-y-3">
+                <div class="bg-white/10 p-3 rounded-xl rounded-tl-none text-sm text-gray-200 border border-white/5"
+                    data-key="chat_welcome">
+                    გამარჯობა! რით შემიძლია დაგეხმაროთ?
+                </div>
+            </div>
+            <div class="p-3 border-t border-white/10 bg-black/30">
+                <div class="flex gap-2">
+                    <input type="text" id="chat-input-field" placeholder="მოგვწერეთ..."
+                        class="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none">
+                    <button class="p-2 bg-blue-600 rounded-lg text-white hover:bg-blue-500 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-container"></div>
+
+    <div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        id="orderModal" style="display:none;" onclick="toggleOrderModal(false)">
+        <div class="glass-heavy w-full max-w-lg p-8 rounded-2xl relative border border-white/10 animate-slide-in-up"
+            onclick="event.stopPropagation()">
+            <span class="absolute top-4 right-4 text-2xl text-gray-400 cursor-pointer hover:text-white" id="orderClose"
+                onclick="toggleOrderModal(false)">&times;</span>
+            <h2 class="text-2xl font-bold text-white mb-6" data-key="modal_order_title">ევაკუატორის შეკვეთა</h2>
+
+            <form id="orderForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_service">სერვისი</label>
+                        <input class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white"
+                            id="orderServiceType" value="ევაკუატორი" readonly>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_car">ავტომობილი</label>
+                        <select id="orderCarSelect"
+                            class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white">
+                            <option value="" data-key="op_choose">ავტომობი არ არის — დაამატე</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_phone">ტელეფონი</label>
+                        <input type="text" id="orderPhone"
+                            class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white"
+                            placeholder="+995 5__ ___ ___" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_pickup">მიღების
+                            მისამართი</label>
+                        <input type="text" id="orderPickup"
+                            class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white"
+                            placeholder="მისამართი" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_dest">დანიშნულების
+                            მისამართი</label>
+                        <input type="text" id="orderDestination"
+                            class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white"
+                            placeholder="მისამართი" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_date">თარიღი & დრო</label>
+                        <input type="datetime-local" id="orderDatetime"
+                            class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_cat">კატეგორია</label>
+                        <select id="orderCategory"
+                            class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white">
+                            <option value="standard" data-key="cat_std">სტანდარტული</option>
+                            <option value="urgent" data-key="cat_urg">სასწრაფო (+20%)</option>
+                            <option value="heavy" data-key="cat_hvy">ღია-ტვირთი (+40%)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1" data-key="label_notes">სხვა მინაწერები</label>
+                        <input type="text" id="orderNotes"
+                            class="w-full p-3 rounded-xl bg-black/30 border border-white/10 text-white"
+                            placeholder="მაგ: ნიშნები, სპეციფიკა">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between mt-6">
+                    <div class="text-sm text-gray-300"><span data-key="label_price">ღირებულება:</span> <strong
+                            id="orderPrice" class="text-white text-lg">-</strong></div>
+                    <div class="flex gap-2">
+                        <button type="button"
+                            class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white transition"
+                            onclick="toggleOrderModal(false)"><span data-key="btn_cancel">გაუქმება</span></button>
+                        <button type="submit"
+                            class="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition shadow-lg shadow-blue-500/30"><span
+                                data-key="btn_send">გაგზავნა</span></button>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-white/10">
+                    <div class="font-bold text-sm mb-2 text-white" data-key="sum_head">შეკვეთის შეჯამება</div>
+                    <ul id="orderSummary" class="text-xs text-gray-400 space-y-1">
+                        <li id="sum-srv">სერვისი: —</li>
+                        <li id="sum-car">მანქანა: —</li>
+                        <li id="sum-pickup">მისამართი: —</li>
+                        <li id="sum-dest">დანიშნულება: —</li>
+                        <li id="sum-time">დრო: —</li>
+                        <li id="sum-price">ღირებულება: —</li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA & CONFIG ---
+        const carBrands = {
+            "Toyota": ["Camry", "Corolla", "Prius", "RAV4", "Highlander", "Land Cruiser", "C-HR", "Yaris", "GR86"],
+            "BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "7 Series", "X1", "X3", "X5", "X6", "i3", "iX"],
+            "Mercedes": ["A-Class", "C-Class", "E-Class", "S-Class", "GLA", "GLC", "GLE", "GLS", "G-Class", "AMG GT"],
+            "Honda": ["Civic", "Accord", "CR-V", "HR-V", "Pilot", "Fit", "Odyssey"],
+            "Ford": ["Fiesta", "Focus", "Fusion", "Mustang", "Escape", "Explorer", "F-150"],
+            "Hyundai": ["Accent", "Elantra", "Sonata", "i30", "Tucson", "Santa Fe", "Palisade", "Kona"],
+            "Kia": ["Rio", "Cerato", "Optima", "Sportage", "Sorento", "Carnival", "Stinger"],
+            "Audi": ["A1", "A3", "A4", "A5", "A6", "Q2", "Q3", "Q5", "Q7", "Q8", "e-tron"],
+            "Volkswagen": ["Polo", "Golf", "Passat", "Jetta", "T-Roc", "Tiguan", "Touareg", "ID.3", "ID.4"],
+            "Chevrolet": ["Spark", "Malibu", "Cruze", "Camaro", "Corvette", "Trailblazer", "Equinox"],
+            "Nissan": ["Micra", "Almera", "Sentra", "Altima", "Maxima", "Qashqai", "X-Trail", "Leaf"],
+            "Renault": ["Clio", "Megane", "Talisman", "Captur", "Koleos", "Scenic"],
+            "Mazda": ["Mazda2", "Mazda3", "Mazda6", "CX-3", "CX-5", "CX-9"],
+            "Subaru": ["Impreza", "Legacy", "Forester", "Outback", "WRX"],
+            "Tesla": ["Model S", "Model 3", "Model X", "Model Y"],
+            "Mitsubishi": ["Attrage", "Lancer", "Outlander", "ASX", "Pajero"],
+            "Volvo": ["S60", "S90", "V60", "V90", "XC40", "XC60", "XC90"],
+            "Jaguar": ["XE", "XF", "E-Pace", "F-Pace", "I-Pace"],
+            "Land Rover": ["Range Rover Evoque", "Discovery Sport", "Range Rover", "Defender", "Range Rover Sport"],
+            "Peugeot": ["208", "308", "508", "3008", "5008"],
+            "Citroen": ["C3", "C4", "C5", "C5 Aircross", "Berlingo"],
+            "Skoda": ["Fabia", "Octavia", "Superb", "Karoq", "Kodiaq"],
+            "Lexus": ["IS", "ES", "GS", "NX", "RX", "LS", "LX"],
+            "Infiniti": ["Q50", "Q60", "QX50", "QX60", "QX80"],
+            "Acura": ["ILX", "TLX", "RDX", "MDX"],
+            "Opel": ["Corsa", "Astra", "Insignia", "Crossland", "Grandland"]
+        };
+        const brandMeta = {
+            "Toyota": { color: "#EB2F28" }, "BMW": { color: "#0C4DA2" }, "Mercedes": { color: "#0A0A0A" },
+            "Honda": { color: "#D9232A" }, "Ford": { color: "#145BFF" }, "Tesla": { color: "#E82127" }
+        };
+
+        const selectedServices = [];
+
+        // --- THEME SWITCHER LOGIC ---
+        const sunIcon = document.getElementById('theme-icon-sun');
+        const moonIcon = document.getElementById('theme-icon-moon');
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.documentElement.classList.add('light');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.remove('light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        }
+
+        function toggleTheme() {
+            const isLight = document.documentElement.classList.contains('light');
+            const newTheme = isLight ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        }
+
+        // --- TRANSLATION LOGIC ---
+        const translations = {
+            // Navigation
+            "nav_reg": { GE: "რეგისტრაცია", EN: "Register", RU: "Регистрация" },
+            "nav_login": { GE: "შესვლა", EN: "Login", RU: "Войти" },
+            "nav_profile": { GE: "პროფილზე გადასვლა", EN: "Go to Profile", RU: "В профиль" },
+            "nav_logout": { GE: "გასვლა", EN: "Logout", RU: "Выйти" },
+            "nav_auth_as": { GE: "ავტორიზებული როგორც", EN: "Logged in as", RU: "Вы вошли как" },
+
+            // Dashboard / Hero
+            "dash_hello": { GE: "გამარჯობა!", EN: "Hello!", RU: "Привет!" },
+            "dash_welcome": { GE: "თქვენი ავტომობილის ყველა მომსახურება — ერთ სივრცეში. მართეთ სერვისები დისტანციურად.", EN: "All your car services in one place. Manage remotely.", RU: "Все услуги для вашего авто в одном месте. Управляйте удаленно." },
+            "btn_new_order": { GE: "ახალი შეკვეთა", EN: "New Order", RU: "Новый заказ" },
+            "btn_add_car": { GE: "ავტომობილის დამატება", EN: "Add Vehicle", RU: "Добавить авто" },
+
+            // Section Titles
+            "title_garage": { GE: "ჩემი გარაჟი", EN: "My Garage", RU: "Мой Гараж" },
+            "title_services": { GE: "სერვისები", EN: "Services", RU: "Услуги" },
+            "title_orders": { GE: "მიმდინარე შეკვეთები", EN: "Current Orders", RU: "Текущие заказы" },
+
+            // Service Cards
+            "srv_evac": { GE: "ევაკუატორი", EN: "Evacuator", RU: "Эвакуатор" },
+            "srv_evac_sub": { GE: "24/7 მომსახურება", EN: "24/7 Service", RU: "24/7 Сервис" },
+            "srv_detail": { GE: "დითეილინგი", EN: "Detailing", RU: "Детейлинг" },
+            "srv_detail_sub": { GE: "პრემიუმ ხარისხი", EN: "Premium Quality", RU: "Премиум качество" },
+            "srv_diag": { GE: "დიაგნოსტიკა", EN: "Diagnostics", RU: "Диагностика" },
+            "srv_diag_sub": { GE: "სრული შემოწმება", EN: "Full Check", RU: "Полная проверка" },
+            "srv_import": { GE: "იმპორტის პაკეტი", EN: "Import Package", RU: "Пакет импорта" },
+            "srv_import_sub": { GE: "სრული სერვისი", EN: "Full Service", RU: "Полный сервис" },
+
+            // Notifications
+            "notif_title": { GE: "შეტყობინებები", EN: "Notifications", RU: "Уведомления" },
+            "notif_empty": { GE: "არ არის ახალი შეტყობინებები", EN: "No new notifications", RU: "Нет новых уведомлений" },
+            "notif_car_deleted": { GE: "მანქანა წაიშალა.", EN: "Vehicle deleted.", RU: "Машина удалена." },
+            "notif_order_sent": { GE: "შეკვეთა გაგზავნილია!", EN: "Order sent!", RU: "Заказ отправлен!" },
+
+            // Empty Order State
+            "empty_title": { GE: "შეკვეთები არ მოიძებნა", EN: "No Orders Found", RU: "Заказы не найдены" },
+            "empty_desc": { GE: "ჯერჯერობით არანაირი შეკვეთა არ არის გაფორმებული.", EN: "No orders have been placed yet.", RU: "Заказов пока нет." },
+
+            // Add Vehicle Modal
+            "modal_add_title": { GE: "ავტომობილის დამატება — ძებნა", EN: "Add Vehicle — Search", RU: "Добавить авто — Поиск" },
+            "label_make": { GE: "მწარმოებელი", EN: "Make", RU: "Марка" },
+            "label_model": { GE: "მოდელი", EN: "Model", RU: "Модель" },
+            "label_or_model": { GE: "ან ჩაწერეთ მოდელი", EN: "Or type model", RU: "Или введите модель" },
+            "label_year": { GE: "წელი", EN: "Year", RU: "Год" },
+            "label_or_year": { GE: "ან ჩაწერეთ წელი", EN: "Or type year", RU: "Или введите год" },
+            "label_plate": { GE: "ნომერი", EN: "License Plate", RU: "Номер" },
+            "label_color": { GE: "ფერი", EN: "Color", RU: "Цвет" },
+            "label_photo": { GE: "ფოტო (ატვირთვა) ან ძებნა", EN: "Photo (Upload) or Search", RU: "Фото (Загрузить) или Поиск" },
+            "btn_search": { GE: "ძებნა", EN: "Search", RU: "Поиск" },
+            "btn_add": { GE: "დამატება", EN: "Add", RU: "Добавить" },
+            "btn_clear": { GE: "გასუფთავება", EN: "Clear", RU: "Очистить" },
+            "op_choose": { GE: "აირჩიეთ...", EN: "Choose...", RU: "Выберите..." },
+            "op_select_brand_first": { GE: "ჯერ აირჩიეთ მწარმოებელი...", EN: "Select make first...", RU: "Сначала выберите марку..." },
+            "label_picture": { GE: "სურათი", EN: "Picture", RU: "Фото" },
+            "alert_fill_make_model": { GE: "გთხოვთ შეავსოთ მწარმოებელი და მოდელი", EN: "Please fill make and model", RU: "Заполните марку и модель" },
+
+            // Order Modal
+            "modal_order_title": { GE: "ევაკუატორის შეკვეთა", EN: "Order Evacuator", RU: "Заказ эвакуатора" },
+            "label_service": { GE: "სერვისი", EN: "Service", RU: "Сервис" },
+            "label_car": { GE: "ავტომობილი", EN: "Vehicle", RU: "Автомобиль" },
+            "label_phone": { GE: "ტელეფონი", EN: "Phone", RU: "Телефон" },
+            "label_pickup": { GE: "მიღების მისამართი", EN: "Pickup Address", RU: "Адрес подачи" },
+            "label_dest": { GE: "დანიშნულების მისამართი", EN: "Destination Address", RU: "Адрес назначения" },
+            "label_date": { GE: "თარიღი & დრო", EN: "Date & Time", RU: "Дата и время" },
+            "label_cat": { GE: "კატეგორია", EN: "Category", RU: "Категория" },
+            "label_notes": { GE: "სხვა მინაწერები", EN: "Other Notes", RU: "Примечания" },
+            "label_price": { GE: "ღირებულება:", EN: "Price:", RU: "Цена:" },
+            "btn_cancel": { GE: "გაუქმება", EN: "Cancel", RU: "Отмена" },
+            "btn_send": { GE: "გაგზავნა", EN: "Send", RU: "Отправить" },
+            "sum_head": { GE: "შეკვეთის შეჯამება", EN: "Order Summary", RU: "Итог заказа" },
+
+            // Notification placeholders - Dynamic
+            "ph_model": { GE: "მაგ: Camry", EN: "Ex: Camry", RU: "Напр: Camry" },
+            "ph_year": { GE: "2022", EN: "2022", RU: "2022" },
+            "ph_plate": { GE: "AA-000-AA", EN: "AA-000-AA", RU: "AA-000-AA" },
+            "ph_color": { GE: "შავი", EN: "Black", RU: "Черный" },
+            "ph_notes": { GE: "მაგ: ნიშნები", EN: "Ex: Signs", RU: "Напр: Приметы" },
+            "ph_addr": { GE: "მისამართი", EN: "Address", RU: "Адрес" },
+            "ph_phone": { GE: "+995 5__ ___ ___", EN: "+995 5__ ___ ___", RU: "+995 5__ ___ ___" },
+            "ph_chat": { GE: "მოგვწერეთ...", EN: "Type a message...", RU: "Напишите сообщение..." },
+
+            // Category Options
+            "cat_std": { GE: "სტანდარტული", EN: "Standard", RU: "Стандарт" },
+            "cat_urg": { GE: "სასწრაფო (+20%)", EN: "Urgent (+20%)", RU: "Срочно (+20%)" },
+            "cat_hvy": { GE: "ღია-ტვირთი (+40%)", EN: "Heavy Load (+40%)", RU: "Тяжелый груз (+40%)" },
+
+            // Dynamic / Garage
+            "empty_garage": { GE: "ჯერ არ გყავთ დამატებული ავტომობილი", EN: "No vehicles added yet", RU: "Нет добавленных авто" },
+            "empty_garage_cta": { GE: "დაამატეთ ახალი მანქანა", EN: "Add a new vehicle", RU: "Добавьте новый автомобиль" },
+            "btn_service": { GE: "სერვისი", EN: "Service", RU: "Сервис" },
+            "val_not_selected": { GE: "არ არის არჩეული", EN: "Not selected", RU: "Не выбрано" },
+            "op_no_car": { GE: "ავტომობილი არ არის — დაამატე", EN: "No vehicle — Add new", RU: "Нет авто - Добавить" },
+            "op_select_car": { GE: "აირჩიე მანქანა", EN: "Select vehicle", RU: "Выберите авто" },
+
+            // Order Summary dynamic labels
+            "sum_srv_label": { GE: "სერვისი:", EN: "Service:", RU: "Сервис:" },
+            "sum_car_label": { GE: "მანქანა:", EN: "Vehicle:", RU: "Авто:" },
+            "sum_addr_label": { GE: "მისამართი:", EN: "Address:", RU: "Адрес:" },
+            "sum_dest_label": { GE: "დანიშნულება:", EN: "Destination:", RU: "Назначение:" },
+            "sum_time_label": { GE: "დრო:", EN: "Time:", RU: "Время:" },
+            "sum_cost_label": { GE: "ღირებულება:", EN: "Price:", RU: "Цена:" },
+
+            // Chat
+            "chat_welcome": { GE: "გამარჯობა! რით შემიძლია დაგეხმაროთ?", EN: "Hello! How can I help you?", RU: "Здравствуйте! Чем могу помочь?" },
+            "chat_assistant": { GE: "ასისტენტი", EN: "Assistant", RU: "Ассистент" },
+            "notif_demo_title": { GE: "ევაკუატორი გზაშია", EN: "Evacuator on the way", RU: "Эвакуатор в пути" },
+            "notif_demo_desc": { GE: "მისვლის დრო: ~12 წუთი", EN: "Arrival time: ~12 min", RU: "Время прибытия: ~12 мин" },
+            "ph_chat": { GE: "მოგვწერეთ...", EN: "Type a message...", RU: "Напишите сообщение..." }
+        };
+
+        function changeLanguage(langCode, label) {
+            document.getElementById('current-lang').innerText = label;
+            document.getElementById('lang-dropdown').classList.add('hidden');
+            localStorage.setItem('language', langCode);
+            localStorage.setItem('languageLabel', label);
+            applyLanguage(langCode);
+        }
+
+        function applyLanguage(lang) {
+            // Apply to all elements with data-key
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[key] && translations[key][lang]) {
+                    el.innerText = translations[key][lang];
+                }
+            });
+
+            // Re-render Dynamic Sections which might be empty or present
+            // e.g. Garage empty state, chat welcome
+
+            // Update Placeholders
+            if (document.getElementById('model-input')) document.getElementById('model-input').placeholder = translations['ph_model'][lang];
+            if (document.getElementById('year-input')) document.getElementById('year-input').placeholder = translations['ph_year'][lang];
+            if (document.getElementById('plate-input')) document.getElementById('plate-input').placeholder = translations['ph_plate'][lang];
+            if (document.getElementById('color-input')) document.getElementById('color-input').placeholder = translations['ph_color'][lang];
+
+            if (document.getElementById('orderNotes')) document.getElementById('orderNotes').placeholder = translations['ph_notes'][lang];
+            if (document.getElementById('orderPickup')) document.getElementById('orderPickup').placeholder = translations['ph_addr'][lang];
+            if (document.getElementById('orderDestination')) document.getElementById('orderDestination').placeholder = translations['ph_addr'][lang];
+            if (document.getElementById('orderPhone')) document.getElementById('orderPhone').placeholder = translations['ph_phone'][lang];
+
+            if (document.getElementById('chat-input-field')) document.getElementById('chat-input-field').placeholder = translations['ph_chat'][lang];
+
+            // Update options that are not selected but statically defined
+            if (document.getElementById('model-select') && document.getElementById('model-select').options[0]) {
+                document.getElementById('model-select').options[0].text = translations['op_select_brand_first'][lang];
+            }
+            if (document.getElementById('year-select') && document.getElementById('year-select').options[0]) {
+                document.getElementById('year-select').options[0].text = translations['label_year'][lang]; // or just "Year"
+            }
+
+            // Refresh Dynamic Lists if they are open
+            // (Simple way: just re-populate if modals are visible)
+            const orderModal = document.getElementById('orderModal');
+            if (orderModal && orderModal.style.display !== 'none') {
+                // Trigger re-update of summaries to catch label changes
+                // We need to access the inner function via window if exposed or trigger event
+                // Here we can just try to update placeholders again or text
+            }
+
+            updateOrderSummary(); // defined globally or in scope below? 
+            // Note: updateOrderSummary is inside a generic closure in original code. 
+            // We'll move it out or expose it to allow global refresh.
+        }
+
+        // --- PAGE INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme(localStorage.getItem('theme') || 'dark');
+            const savedLang = localStorage.getItem('language') || 'GE';
+            const savedLabel = localStorage.getItem('languageLabel') || 'GE';
+            const langEl = document.getElementById('current-lang');
+            if (langEl) langEl.innerText = savedLabel;
+            applyLanguage(savedLang);
+
+            const userName = sessionStorage.getItem('userName');
+            if (userName) {
+                document.getElementById('welcome-title').textContent = `გამარჯობა, ${userName}!`;
+                const nameEl = document.getElementById('user-name') || document.getElementById('header-user-name');
+                if (nameEl) nameEl.textContent = userName;
+
+                const dropdownNameEl = document.getElementById('dropdown-user-name');
+                if (dropdownNameEl) dropdownNameEl.textContent = userName;
+
+                const initialEl = document.getElementById('user-initial');
+                if (initialEl && userName.length > 0) {
+                    initialEl.textContent = userName.charAt(0).toUpperCase();
+                }
+            } else {
+                // If not logged in, redirect (commented out for demo purposes, uncomment in production)
+                // window.location.href = 'luka.html';
+            }
+
+            renderGarage();
+        });
+
+        // --- UI TOGGLES ---
+        function toggleDropdown(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+        function toggleProfileDropdown(event) {
+            event.stopPropagation();
+            document.getElementById('profile-dropdown').classList.toggle('hidden');
+            // document.getElementById('user-name-button').classList.toggle('open');
+        }
+        function toggleNotifications() {
+            document.getElementById('notifications-panel').classList.toggle('hidden');
+        }
+        function toggleChat() {
+            document.getElementById('chat-window').classList.toggle('hidden');
+        }
+        function closeModal(e) {
+            if (!e || e.target === e.currentTarget) {
+                document.getElementById('modal-container').innerHTML = '';
+            }
+        }
+        function showNotification(msg) {
+            const div = document.createElement('div');
+            div.className = 'fixed top-4 right-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl shadow-2xl z-[60] border border-white/20 backdrop-blur-md animate-slide-in-up flex items-center gap-3';
+            div.innerHTML = `<span>🔔</span> <span>${msg}</span>`;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
+        // --- NEW ADD VEHICLE MODAL LOGIC (MATCHING THE IMAGE) ---
+        function showAddVehicleModal() {
+            const brandsOptions = Object.keys(carBrands).sort().map(b => `<option value="${b}">${b}</option>`).join('');
+
+            const modal = `
+            <div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4" onclick="closeModal(event)">
+                <div class="modal-content glass-card w-full max-w-xl p-6 rounded-2xl relative border border-white/10" onclick="event.stopPropagation()">
+                    <button class="close-modal" onclick="closeModal()">×</button>
+                    <h3 style="margin-bottom:12px; font-size:20px; font-weight:700;" data-key="modal_add_title">ავტომობილის დამატება — ძებნა</h3>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label data-key="label_make">მწარმოებელი</label>
+                            <select id="brand-select" class="form-input" onchange="updateModels(this)">
+                                <option value="" data-key="op_choose">აირჩიეთ...</option>
+                                ${brandsOptions}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-key="label_model">მოდელი</label>
+                            <select id="model-select" class="form-input" disabled>
+                                <option data-key="op_select_brand_first">პირველად აირჩიეთ ბრენდი...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-key="label_or_model">ან ჩაწერეთ მოდელი</label>
+                            <input id="model-input" class="form-input" placeholder="მაგ: Camry" />
+                        </div>
+
+                        <div class="form-group">
+                            <label data-key="label_year">წელი</label>
+                            <select id="year-select" class="form-input"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-key="label_or_year">ან ჩაწერეთ წელი</label>
+                            <input id="year-input" type="number" min="1900" max="2099" class="form-input" placeholder="2022" />
+                        </div>
+
+                        <div class="form-group">
+                            <label data-key="label_plate">ნომერი</label>
+                            <input id="plate-input" class="form-input" placeholder="AA-000-AA" />
+                        </div>
+
+                        <div class="form-group">
+                            <label data-key="label_color">ფერი</label>
+                            <input id="color-input" class="form-input" placeholder="შავი" />
+                        </div>
+
+                         <div class="form-group full-width">
+                            <label data-key="label_photo">ფოტო (ატვირთვა) ან ძებნა</label>
+                            <div style="display:flex;gap:10px;">
+                                <input type="file" id="photo-input" accept="image/*" class="form-input" onchange="handleUploadPreview(this)" />
+                                <button type="button" class="btn btn-glass search-button" onclick="searchVehicle()"><span data-key="btn_search">ძებნა</span></button>
+                            </div>
+                            <div id="file-count" style="font-size:12px; margin-top:8px; color:var(--text-muted)"></div>
+                        </div>
+                    </div>
+
+                    <div id="vehicle-preview" class="glass-card" style="margin-top:16px; display:none; padding:12px;">
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <div id="preview-image" style="width:140px; height:90px; background:#071023; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                                <span style="color:rgba(255,255,255,0.5)" data-key="label_picture">სურათი</span>
+                            </div>
+                            <div style="flex:1;">
+                                <div id="preview-title" style="font-weight:700; font-size:16px;"></div>
+                                <div id="preview-meta" style="color:var(--text-muted); font-size:13px; margin-top:6px;"></div>
+                                <div style="margin-top:10px; display:flex; gap:8px;">
+                                    <button id="add-found-car" class="btn btn-primary" onclick="addSearchedCarToGarage()"><span data-key="btn_add">დამატება</span></button>
+                                    <button class="btn btn-glass" onclick="clearVehiclePreview()"><span data-key="btn_clear">გასუფთავება</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+            document.getElementById('modal-container').innerHTML = modal;
+
+            // Fill years with uniform heights and styling
+            const yearSelect = document.getElementById('year-select');
+            if (yearSelect) {
+                yearSelect.innerHTML = '<option value="">წელი</option>';
+                const cur = new Date().getFullYear();
+                for (let y = cur; y >= 1980; y--) {
+                    const opt = document.createElement('option'); opt.value = y; opt.textContent = y; yearSelect.appendChild(opt);
+                }
+            }
+
+            // Hook model select to manual input for convenience
+            const ms = document.getElementById('model-select');
+            const mi = document.getElementById('model-input');
+            if (ms && mi) ms.addEventListener('change', () => { if (ms.value) mi.value = ms.value; });
+
+            // Ensure inputs adopt form-input class for consistent sizing (if dynamic)
+            const formInputs = document.querySelectorAll('#modal-container .form-input');
+            formInputs.forEach(i => i.style.height = '48px');
+
+            // Apply translations to the newly created modal
+            const currentLang = localStorage.getItem('language') || 'GE';
+            applyLanguage(currentLang);
+        }
+
+        // updateModels already exists; ensure it accepts (select) param and sets model select - no change needed
+        // searchVehicle: preserve previous Unsplash logic (preview)
+        function searchVehicle() {
+            const brand = document.getElementById('brand-select')?.value || '';
+            const model = document.getElementById('model-input')?.value || '';
+            const year = document.getElementById('year-input')?.value || document.getElementById('year-select')?.value || '';
+            if (!brand && !model) { alert('გთხოვთ შეარჩიოთ მწარმოებელი ან შეიყვანოთ მოდელი'); return; }
+            const query = `${brand} ${model} car`.trim();
+            const imageUrl = `https://source.unsplash.com/800x480/?${encodeURIComponent(query)}`;
+
+            document.getElementById('preview-title').textContent = `${brand} ${model} ${year ? '• ' + year : ''}`;
+            document.getElementById('preview-meta').textContent = `${brand} • ${model} • ${year || ''}`;
+
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = function () {
+                document.getElementById('preview-image').innerHTML = `<img src="${imageUrl}" style="width:100%;height:100%;object-fit:cover">`;
+            };
+            img.onerror = function () {
+                document.getElementById('preview-image').innerHTML = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#aaa">${brand || 'Car'}</div>`;
+            };
+
+            document.getElementById('vehicle-preview').style.display = 'block';
+            const addBtn = document.getElementById('add-found-car');
+            if (addBtn) {
+                addBtn.dataset.brand = brand;
+                addBtn.dataset.model = model;
+                addBtn.dataset.year = year;
+                addBtn.dataset.image = imageUrl;
+            }
+        }
+
+        // manual file upload preview
+        function handleUploadPreview(input) {
+            const file = input.files && input.files[0];
+            document.getElementById('file-count').innerText = `${input.files.length} ფოტო არჩეულია`;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('preview-image').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+                    document.getElementById('vehicle-preview').style.display = 'block';
+                    // store selected image on add button
+                    const addBtn = document.getElementById('add-found-car');
+                    if (addBtn) addBtn.dataset.image = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function clearVehiclePreview() {
+            document.getElementById('vehicle-preview').style.display = 'none';
+            const lang = localStorage.getItem('language') || 'GE';
+            document.getElementById('preview-image').innerHTML = `<span style="color:rgba(255,255,255,0.5)">${translations['label_picture'][lang]}</span>`;
+            document.getElementById('preview-title').textContent = '';
+            document.getElementById('preview-meta').textContent = '';
+            const addBtn = document.getElementById('add-found-car');
+            if (addBtn) { addBtn.removeAttribute('data-brand'); addBtn.removeAttribute('data-model'); addBtn.removeAttribute('data-year'); addBtn.removeAttribute('data-image'); }
+        }
+
+        function addSearchedCarToGarage() {
+            const addBtn = document.getElementById('add-found-car');
+            if (!addBtn) return;
+            const brand = addBtn.dataset.brand || document.getElementById('brand-select')?.value || '';
+            const model = addBtn.dataset.model || document.getElementById('model-input')?.value || '';
+            const year = addBtn.dataset.year || document.getElementById('year-input')?.value || document.getElementById('year-select')?.value || '';
+            const plate = document.getElementById('plate-input')?.value || '';
+            const color = document.getElementById('color-input')?.value || '';
+            const vin = document.getElementById('vin-input')?.value || '';
+            const image = addBtn.dataset.image || null;
+            if (!brand || !model) {
+                const lang = localStorage.getItem('language') || 'GE';
+                alert(translations['alert_fill_make_model'][lang]);
+                return;
+            }
+            const car = { make: brand, model: model, year: year, plate: plate, color: color, vin: vin.toUpperCase(), image: image };
+            saveCar(car);
+            clearVehiclePreview();
+        }
+
+        // --- GARAGE RENDERING ---
+        function renderGarage() {
+            const garage = document.getElementById('garage-grid');
+            garage.innerHTML = '';
+            const arr = JSON.parse(localStorage.getItem('nc_my_cars') || '[]');
+
+            // Render existing cars
+            arr.forEach((c) => {
+                const card = createVehicleCard(c);
+                garage.appendChild(card);
+            });
+
+            // Add "Add New" button card
+            const addCard = document.createElement('div');
+            addCard.className = 'glass-card p-6 border-2 border-dashed border-white/10 hover:border-blue-500/50 transition cursor-pointer flex flex-col items-center justify-center text-center group min-h-[200px]';
+            // Use translations for inner content immediately
+            const lang = localStorage.getItem('language') || 'GE';
+            // Note: renderGarage calls applyLanguage at the end so initial static text will be overridden, but best to set it clean. 
+            // Better yet, use data-keys and let applyLanguage handle it.
+            addCard.innerHTML = `<div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition"><svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg></div><h3 class="text-lg font-semibold text-white mb-1" data-key="btn_add_car">ავტომობილის დამატება</h3><p class="text-sm text-gray-500" data-key="empty_garage_cta">დაამატეთ ახალი მანქანა</p>`;
+            addCard.addEventListener('click', showAddVehicleModal);
+            garage.appendChild(addCard);
+
+            // Re-apply keys to new elements
+            const currentLang = localStorage.getItem('language') || 'GE';
+            applyLanguage(currentLang);
+        }
+
+        function createVehicleCard(car) {
+            const card = document.createElement('div');
+            card.className = 'glass-card p-6 group relative overflow-hidden flex flex-col';
+
+            // Image Background or Fallback
+            let imageHTML = '';
+            if (car.image) {
+                imageHTML = `<div class="w-full h-32 mb-4 rounded-xl overflow-hidden bg-black/50"><img src="${car.image}" class="w-full h-full object-cover"></div>`;
+            } else {
+                imageHTML = `<div class="w-full h-32 mb-4 rounded-xl overflow-hidden bg-white/5 flex items-center justify-center text-4xl">🚗</div>`;
+            }
+
+            card.innerHTML = `
+                ${imageHTML}
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition">${car.make} ${car.model}</h3>
+                    <div class="flex items-center gap-2 mt-2">
+                         <span class="text-xs font-bold bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">${car.year || '----'}</span>
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-3">
+                    <button onclick="showOrderModal()" class="flex-1 py-2 bg-blue-600/20 text-blue-400 border border-blue-600/30 rounded-xl font-semibold hover:bg-blue-600 hover:text-white transition text-sm">
+                        <span data-key="btn_service">სერვისი</span>
+                    </button>
+                    <button onclick="deleteVehicle(this, '${car.make}', '${car.model}')" class="p-2 bg-red-900/20 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500 hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                </div>
+            `;
+            return card;
+        }
+
+
+
+        function deleteVehicle(btn, make, model) {
+            if (confirm('ნამდვილად გსურთ წაშლა?')) {
+                let arr = JSON.parse(localStorage.getItem('nc_my_cars') || '[]');
+                arr = arr.filter(c => !(c.make === make && c.model === model));
+                localStorage.setItem('nc_my_cars', JSON.stringify(arr));
+                localStorage.setItem('nc_cars', JSON.stringify(arr));
+                renderGarage();
+                const lang = localStorage.getItem('language') || 'GE';
+                showNotification(translations['notif_car_deleted'][lang]);
+            }
+        }
+
+        // --- ORDER LOGIC ---
+        (function () {
+            const orderModal = document.getElementById('orderModal');
+            const orderServiceType = document.getElementById('orderServiceType');
+            const orderCarSelect = document.getElementById('orderCarSelect');
+            const orderPhone = document.getElementById('orderPhone');
+            const orderPickup = document.getElementById('orderPickup');
+            const orderDestination = document.getElementById('orderDestination');
+            const orderDatetime = document.getElementById('orderDatetime');
+            const orderCategory = document.getElementById('orderCategory');
+            const orderNotes = document.getElementById('orderNotes');
+            const orderPrice = document.getElementById('orderPrice');
+
+            window.toggleOrderModal = function (show) {
+                if (show) {
+                    populateCarOptions();
+                    updateOrderSummary();
+                    orderModal.style.display = 'flex';
+                } else {
+                    orderModal.style.display = 'none';
+                }
+            }
+
+            function populateCarOptions() {
+                const lang = localStorage.getItem('language') || 'GE';
+                const cars = JSON.parse(localStorage.getItem('nc_my_cars') || '[]');
+                orderCarSelect.innerHTML = '';
+                if (!cars.length) {
+                    const opt = document.createElement('option'); opt.value = ''; opt.textContent = translations['op_no_car'][lang];
+                    orderCarSelect.appendChild(opt);
+                } else {
+                    const optDefault = document.createElement('option'); optDefault.value = ''; optDefault.textContent = translations['op_select_car'][lang]; orderCarSelect.appendChild(optDefault);
+                    cars.forEach((c, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = idx;
+                        opt.textContent = `${c.make} ${c.model} • ${c.year}`;
+                        orderCarSelect.appendChild(opt);
+                    });
+                }
+            }
+
+            function computePrice() {
+                const cat = orderCategory.value;
+                let base = 50;
+                if (cat === 'urgent') base = Math.round(base * 1.2);
+                if (cat === 'heavy') base = Math.round(base * 1.4);
+                return base + ' ₾';
+            }
+
+            // Expose updateOrderSummary globally for translation refreshing
+            window.updateOrderSummary = function () {
+                const lang = localStorage.getItem('language') || 'GE';
+                const cars = JSON.parse(localStorage.getItem('nc_my_cars') || '[]');
+                const selectedIdx = orderCarSelect.value;
+                const carText = (selectedIdx !== '' && cars[selectedIdx]) ? `${cars[selectedIdx].make} ${cars[selectedIdx].model}` : translations['val_not_selected'][lang];
+
+                document.getElementById('sum-srv').textContent = `${translations['sum_srv_label'][lang]} ${orderServiceType.value || '-'}`;
+                document.getElementById('sum-car').textContent = `${translations['sum_car_label'][lang]} ${carText}`;
+                document.getElementById('sum-pickup').textContent = `${translations['sum_addr_label'][lang]} ${orderPickup.value || '-'}`;
+                document.getElementById('sum-dest').textContent = `${translations['sum_dest_label'][lang]} ${orderDestination.value || '-'}`;
+                document.getElementById('sum-time').textContent = `${translations['sum_time_label'][lang]} ${orderDatetime.value || '-'}`;
+
+                const price = computePrice();
+                orderPrice.textContent = price;
+                document.getElementById('sum-price').textContent = `${translations['sum_cost_label'][lang]} ${price}`;
+            };
+
+            [orderCarSelect, orderPhone, orderPickup, orderDestination, orderDatetime, orderCategory, orderNotes].forEach(el => {
+                if (!el) return;
+                el.addEventListener('input', updateOrderSummary);
+                el.addEventListener('change', updateOrderSummary);
+            });
+
+            window.selectService = function (type) {
+                // Map type to name for simplicity
+                let name = 'სერვისი';
+                if (type === 'evacuator') name = 'ევაკუატორი';
+                if (type === 'detailing') name = 'დითეილინგი';
+                if (type === 'diagnostics') name = 'დიაგნოსტიკა';
+                if (type === 'import') name = 'იმპორტი';
+                orderServiceType.value = name;
+                toggleOrderModal(true);
+            }
+
+            const orderForm = document.getElementById('orderForm');
+            orderForm && orderForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const lang = localStorage.getItem('language') || 'GE';
+                showNotification(translations['notif_order_sent'][lang]);
+                toggleOrderModal(false);
+            });
+
+        })();
+
+        // Initial Setup from index.html (Standardized)
+        function changeLanguage(langCode, label) {
+            // Update all language text indicators (desktop & mobile classes)
+            document.querySelectorAll('.current-lang-text').forEach(el => el.innerText = label);
+
+            // Handle dropdowns safely
+            ['lang-dropdown-desktop', 'lang-dropdown-mobile'].forEach(id => {
+                const dd = document.getElementById(id);
+                if (dd) dd.classList.add('hidden');
+            });
+
+            localStorage.setItem('language', langCode);
+            localStorage.setItem('languageLabel', label);
+            applyLanguage(langCode);
+        }
+
+        function toggleTheme() {
+            const isLight = document.documentElement.classList.contains('light');
+            const newTheme = isLight ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        }
+
+        function applyTheme(theme) {
+            const sunIcons = document.querySelectorAll('.theme-icon-sun');
+            const moonIcons = document.querySelectorAll('.theme-icon-moon');
+
+            if (theme === 'light') {
+                document.documentElement.classList.add('light');
+                sunIcons.forEach(el => el.classList.add('hidden'));
+                moonIcons.forEach(el => el.classList.remove('hidden'));
+            } else {
+                document.documentElement.classList.remove('light');
+                sunIcons.forEach(el => el.classList.remove('hidden'));
+                moonIcons.forEach(el => el.classList.add('hidden'));
+            }
+        }
+
+        function toggleDropdown(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('hidden');
+        }
+
+        function toggleProfileDropdown(event) {
+            event.stopPropagation();
+            const dd = document.getElementById('profile-dropdown');
+            if (dd) dd.classList.toggle('hidden');
+        }
+
+        function toggleNotifications() {
+            const notifBtn = document.querySelector('button[onclick="toggleNotifications()"]');
+            if (notifBtn) notifBtn.classList.toggle('bg-white/10');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        function instantDemoLogin() {
+            const demoName = "Demo User";
+            sessionStorage.setItem('userName', demoName);
+            updateHeaderUI(demoName);
+            // Instant redirect (reload if on profile page to refresh state)
+            window.location.reload();
+        }
+
+        function updateHeaderUI(userName) {
+            const userProfiles = document.querySelectorAll('.user-profile-container');
+            const authButtons = document.querySelectorAll('.auth-buttons-container');
+            const userNameTexts = document.querySelectorAll('.user-name-text');
+
+            if (userName) {
+                userProfiles.forEach(el => {
+                    el.classList.remove('hidden');
+                    el.classList.add('flex');
+                });
+                authButtons.forEach(el => el.classList.add('hidden')); // Hide login buttons
+                userNameTexts.forEach(el => el.textContent = userName);
+            } else {
+                // If logged out (standard state)
+                userProfiles.forEach(el => {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                });
+                authButtons.forEach(el => el.classList.remove('hidden'));
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+
+        // Initialize Theme & Lang & User
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme
+            applyTheme(localStorage.getItem('theme') || 'dark');
+
+            // Lang
+            const savedLang = localStorage.getItem('language') || 'GE';
+            const savedLabel = localStorage.getItem('languageLabel') || 'GE';
+            document.querySelectorAll('.current-lang-text').forEach(el => el.innerText = savedLabel);
+            applyLanguage(savedLang);
+
+            // User Session
+            const userName = sessionStorage.getItem('userName');
+            if (userName) {
+                updateHeaderUI(userName);
+            }
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            ['profile-dropdown', 'lang-dropdown-desktop', 'lang-dropdown-mobile'].forEach(id => {
+                const dd = document.getElementById(id);
+                if (dd && !dd.classList.contains('hidden') && !dd.contains(e.target) && !e.target.closest('button')) {
+                    dd.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
