@@ -349,20 +349,21 @@
         html.light input {
             color: #0f172a !important;
         }
-    </style>
-    /* --- MOBILE MENU --- */
-    #mobile-menu {
-    transition: all 0.3s ease-in-out;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    }
 
-    #mobile-menu.open {
-    max-height: 500px; /* Adjust based on content */
-    opacity: 1;
-    margin-top: 1rem;
-    }
+        /* --- MOBILE MENU --- */
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        #mobile-menu.open {
+            max-height: 500px;
+            /* Adjust based on content */
+            opacity: 1;
+            margin-top: 1rem;
+        }
     </style>
     <style>
         /* --- PROFILE DROPDOWN --- */
@@ -577,7 +578,7 @@
     </header>
 
     <div id="main-container">
-        <section class="flex items-center justify-center relative">
+        <section class="flex items-center justify-center relative pt-32 md:pt-40">
             <div class="max-w-7xl mx-auto px-4 text-center z-10">
                 <div
                     class="glass-card inline-block px-4 py-1 mb-6 rounded-full border border-blue-400/30 reveal-element">
@@ -1393,6 +1394,32 @@
             resetHeaderUI();
             showNotification(translations['notif_logout'][getLang()], 'info');
             window.location.href = 'index.html'; // Ensure we stay on index
+        }
+
+        function resetHeaderUI() {
+            updateHeaderUI(null);
+        }
+
+        function updateHeaderUI(userName) {
+            const userProfiles = document.querySelectorAll('.user-profile-container');
+            const authButtons = document.querySelectorAll('.auth-buttons-container');
+            const userNameTexts = document.querySelectorAll('.user-name-text');
+
+            if (userName) {
+                userProfiles.forEach(el => {
+                    el.classList.remove('hidden');
+                    el.classList.add('flex');
+                });
+                authButtons.forEach(el => el.classList.add('hidden')); // Hide login buttons
+                userNameTexts.forEach(el => el.textContent = userName);
+            } else {
+                // If logged out (standard state)
+                userProfiles.forEach(el => {
+                    el.classList.add('hidden');
+                    el.classList.remove('flex');
+                });
+                authButtons.forEach(el => el.classList.remove('hidden'));
+            }
         }
 
         // --- TRANSLATION LOGIC ---
