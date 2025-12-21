@@ -396,6 +396,71 @@
                 transform: translateY(0);
             }
         }
+
+        /* --- SITE WARNING MODAL --- */
+        .site-warning-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .site-warning-content {
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .warning-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .close-warning-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-warning-btn:hover {
+            background: rgba(239, 68, 68, 0.8);
+            transform: rotate(90deg);
+        }
+
+        .site-warning-backdrop.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -406,6 +471,39 @@
         <div class="blob blob-2"></div>
         <div class="blob blob-3"></div>
     </div>
+
+    <!-- SITE WARNING MODAL -->
+    <div id="site-warning-modal" class="site-warning-backdrop">
+        <div class="site-warning-content glass-heavy">
+            <button id="close-warning-btn" class="close-warning-btn">&times;</button>
+            <p class="warning-text">საიტი არ ფუნქციონირებს</p>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const warningModal = document.getElementById('site-warning-modal');
+            const closeBtn = document.getElementById('close-warning-btn');
+
+            if (warningModal && closeBtn) {
+                const closeModal = () => {
+                    warningModal.classList.add('hidden');
+                    // Optional: Remove from DOM after transition
+                    setTimeout(() => {
+                        warningModal.style.display = 'none';
+                    }, 500);
+                };
+
+                closeBtn.addEventListener('click', closeModal);
+
+                // Close on click outside
+                warningModal.addEventListener('click', (e) => {
+                    if (e.target === warningModal) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    </script>
 
     <!-- HEADER START -->
     <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 p-4">
@@ -699,20 +797,7 @@
                             data-key="serv_tires">საბურავები</span>
                     </button>
 
-                    <button onclick="showServiceInfo('import-package')"
-                        class="glass-card p-4 md:p-6 flex flex-col items-center justify-center gap-3 md:gap-4 group h-40 md:h-48 relative border-green-400/30 reveal-element">
-                        <span
-                            class="absolute top-3 right-3 bg-green-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
-                        <div
-                            class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-green-600/20 transition">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                            </svg>
-                        </div>
-                        <span class="font-semibold text-gray-200 group-hover:text-white" data-key="serv_import">იმპორტის
-                            პაკეტი</span>
-                    </button>
+
                 </div>
             </div>
         </section>
@@ -1162,8 +1247,7 @@
                 'detailing': { icon: 'M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
                 'diagnostics': { icon: 'M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z' },
                 'oil-change': { icon: 'M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z' },
-                'tires': { icon: 'M12 0C8.74 0 8.333.015 7.053.072' },
-                'import-package': { icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' }
+                'tires': { icon: 'M12 0C8.74 0 8.333.015 7.053.072' }
             };
 
             const info = serviceInfo[serviceType];
@@ -1451,7 +1535,6 @@
             "serv_diag": { GE: "დიაგნოსტიკა", EN: "Diagnostics", RU: "Диагностика" },
             "serv_oil": { GE: "ზეთის შეცვლა", EN: "Oil Change", RU: "Замена Масла" },
             "serv_tires": { GE: "საბურავები", EN: "Tires", RU: "Шины" },
-            "serv_import": { GE: "იმპორტის პაკეტი", EN: "Import Package", RU: "Пакет Импорта" },
 
             // Panel
             "panel_title": {
@@ -1521,9 +1604,7 @@
             "serv_tires_desc": { GE: "მობილური ვულკანიზაცია", EN: "Mobile vulcanization", RU: "Мобильный шиномонтаж" },
             "serv_tires_price": { GE: "დან 30₾", EN: "From 30₾", RU: "От 30₾" },
 
-            "serv_import-package_title": { GE: "იმპორტის პაკეტი", EN: "Import Package", RU: "Пакет Импорта" },
-            "serv_import-package_desc": { GE: "სრული მომსახურება ჩამოყვანილი მანქანებისთვის", EN: "Full service for imported cars", RU: "Полный сервис для импортированных авто" },
-            "serv_import-package_price": { GE: "შეთანხმებით", EN: "Negotiable", RU: "Договорная" },
+
 
             "btn_order": { GE: "შეკვეთის გაფორმება", EN: "Place Order", RU: "Оформить заказ" },
             "btn_close": { GE: "დახურვა", EN: "Close", RU: "Закрыть" },
